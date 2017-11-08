@@ -40,17 +40,32 @@ class CourseContainer extends Component {
     }
   }
 
+
+  courseChanger = (e) => {
+  this.setState({
+    currentCourse: Object.assign(this.state.currentCourse, {name: e.target.value})
+  })
+  // fetch("https://murmuring-cliffs-39770.herokuapp.com/students/")
+  //   .then(res => res.json())
+  //   .then(json => console.log(json))
+  //   }))
+  }
+
+  selectStudentToEdit = () => {
+    console.log("hi")
+  }
+
   render() {
+
 
     return (
       <div className="ui grid container">
 
         <div className="ui center aligned header sixteen wide column">
-          {/* Course Title Here */}
-          Course Title
+          {this.state.currentCourse.name}
         </div>
 
-        <CourseSelector/>
+        <CourseSelector courseChanger={this.courseChanger}/>
 
         {/* Edit Form */}
         <form className="ui form center aligned sixteen wide column" onSubmit={''}>
@@ -83,7 +98,7 @@ class CourseContainer extends Component {
           </div>
         </form>
 
-        <StudentsList/>
+        <StudentsList students={this.state.students} courseChanger={this.courseChanger}/>
 
       </div>
     )
