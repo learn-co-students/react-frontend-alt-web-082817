@@ -35,9 +35,48 @@ class CourseContainer extends Component {
           percentage: 98
         }
       ],
-      currentCourse: {},
-      currentStudent: {}
+      name: "",
+      class_year: "",
+      percentage: "",
+      currentStudent: {},
+      courseList: courseList,
+      courseListId: "",
+      currentCourse: "",
+      currentCourseId: "",
+      currentCourseList: {}
     }
+  }
+
+  handleCourseChange = newCourse => {
+    this.setState({ currentCourse: newCourse })
+    this.fetchCourse()
+  }
+
+  handleInputChange = e => {
+    this.setState({ [e.target.id] : e.target.value })
+  }
+
+  componentDidUpdate() {
+    this.findCourse()
+  }
+
+  findCourse() {
+    var a = this.state.courseList.filter(course => {
+      return (
+        course.name ===this.state.currentCourse
+      )
+    })
+    console.log(a)
+    const courseListId = a[0].id
+    console.log(courseListId)
+
+  }
+
+  fetchCourse() {
+    fetch('https://murmuring-cliffs-39770.herokuapp.com/courses/{currentCourseId}')
+    .then( res => res.json())
+    .then( json => this.setState({ currentCourseList: json}))
+
   }
 
   render() {
@@ -46,44 +85,44 @@ class CourseContainer extends Component {
       <div className="ui grid container">
 
         <div className="ui center aligned header sixteen wide column">
-          {/* Course Title Here */}
+          {this.state.currentCourse}
           Course Title
         </div>
 
-        <CourseSelector/>
+        <CourseSelector handleCourseChange={this.handleCourseChange} />
 
         {/* Edit Form */}
-        <form className="ui form center aligned sixteen wide column" onSubmit={''}>
+        <form className="ui form center aligned sixteen wide column" onSubmit={this.onHandleCourseChange}>
           <div className="inline fields">
             <div className="four wide field">
               <input
                 id="name"
                 type="text"
-                value={""}
-                onChange={"your code here"}
+                value={this.state.name}
+                onChange={this.handleInputChange}
               />
             </div>
             <div className="four wide field">
               <input
                 id="class_year"
                 type="number"
-                value={""}
-                onChange={"your code here"}
+                value={this.state.class_year}
+                onChange={this.handleInputChange}
               />
             </div>
             <div className="four wide field">
               <input
                 id="percentage"
                 type="number"
-                value={""}
-                onChange={"your code here"}
+                value={this.state.percentage}
+                onChange={this.handleInputChange}
               />
             </div>
             <button className="ui button" type="submit">Submit</button>
           </div>
         </form>
 
-        <StudentsList/>
+        <StudentsList students = {this.state.students}/>
 
       </div>
     )
